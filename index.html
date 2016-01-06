@@ -6,21 +6,30 @@
 	<link rel="stylesheet" href="css/simple.css">
 	<script type="text/javascript">
 		function updateList(btn) {
-			btn.classList.add('disabled');		
+			if (btn != null) {
+				btn.classList.add('disabled');
+			}
+			
 			var xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
 			var url = "songlist.json";
 			
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-					var songs = JSON.parse(xmlhttp.responseText);
-					var sl = document.getElementById('songlist');
-					
 					// Clear current list
+					var sl = document.getElementById('songlist');
 					while (sl.firstChild) {
 						sl.removeChild(sl.firstChild);
 					}
 					
+					if (xmlhttp.responseText == "~") {
+						document.getElementById('emptyList').style.visibility = 'visible';
+						return;
+					}
+
+					document.getElementById('emptyList').style.visibility = 'hidden';
+					
 					// Go through songs from JSON
+					var songs = JSON.parse(xmlhttp.responseText);
 					for (var i = 0; i < songs.length; i++) {
 						var tr = document.createElement('tr');
 						var song = songs[i];
@@ -51,8 +60,9 @@
 						// Duration
 						var minutes = Math.floor(song.duration / 60);
 						var seconds = (song.duration % 60) + '';
-						if (seconds.length == 1)
+						if (seconds.length == 1) {
 							seconds = '0' + seconds;
+						}
 						td = document.createElement('td');
 						td.appendChild(document.createTextNode(minutes + ':' + seconds));
 						tr.appendChild(td);
@@ -72,7 +82,7 @@
 			xmlhttp.open("GET", url, true);
 			xmlhttp.send();
 		}
-		updateList();
+		updateList(null);
 	</script>
 </head>
 <body>
@@ -84,6 +94,7 @@
 						<b>SimpleVar <small>Song List</small></b>
 					</h1>
 				</div>
+				<div id="emptyList" style="visibility: hidden">The song list is empty!</div>
 				<div style="position: relative">
 					<nav>
 						<ul id="pages" class="pagination">
