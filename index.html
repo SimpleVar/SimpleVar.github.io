@@ -7,7 +7,7 @@
 	<script type="text/javascript">
 		function updateList() {
 			var xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
-			var url = "songlist.json";
+			var url = "songlist.json?r=" + new Date().getTime();
 			
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
