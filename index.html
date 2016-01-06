@@ -39,6 +39,7 @@
 						td = document.createElement('td');
 						var aEl = document.createElement('a');
 						aEl.href = song.url;
+						aEl.target = "_blank";
 						var iconEl = document.createElement('i');
 						iconEl.classList.add('fa');
 						iconEl.classList.add('fa-external-link');
@@ -72,12 +73,10 @@
 					}
 				}
 			};
-			
 			xmlhttp.open("GET", url, true);
 			xmlhttp.send();
 		}
-		
-		updateList(null);
+		updateList();
 	</script>
 </head>
 <body>
