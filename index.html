@@ -1,1 +1,113 @@
+<html>
+<head>
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/simple.css">
+	<script type="text/javascript">
+		function updateList(btn) {
+			btn.classList.add('disabled');		
+			var xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+			var url = "songlist.json";
+			
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var songs = JSON.parse(xmlhttp.responseText);
+					var sl = document.getElementById('songlist');
+					
+					// Clear current list
+					while (sl.firstChild) {
+						sl.removeChild(sl.firstChild);
+					}
+					
+					// Go through songs from JSON
+					for (var i = 0; i < songs.length; i++) {
+						var tr = document.createElement('tr');
+						var song = songs[i];
+						
+						// #
+						var td = document.createElement('td');
+						td.appendChild(document.createTextNode(song.i));
+						tr.appendChild(td);
+						
+						// TODO LINK
+						td = document.createElement('td');
+						var aEl = document.createElement('a');
+						aEl.href = song.url;
+						var iconEl = document.createElement('i');
+						iconEl.classList.add('fa');
+						iconEl.classList.add('fa-external-link');
+						aEl.appendChild(iconEl);
+						td.appendChild(aEl);
+						tr.appendChild(td);
+						
+						// Name
+						td = document.createElement('td');
+						td.appendChild(document.createTextNode(song.title));
+						tr.appendChild(td);
 
+						// lets ignore url for now
+						
+						// Duration
+						var minutes = Math.floor(song.duration / 60);
+						var seconds = (song.duration % 60) + '';
+						if (seconds.length == 1)
+							seconds = '0' + seconds;
+						td = document.createElement('td');
+						td.appendChild(document.createTextNode(minutes + ':' + seconds));
+						tr.appendChild(td);
+						
+						// Requested By
+						td = document.createElement('td');
+						td.appendChild(document.createTextNode(song.req));
+						tr.appendChild(td);
+						
+						sl.appendChild(tr);
+					}
+				}
+				
+				btn.classList.remove('disabled');
+			};
+			
+			xmlhttp.open("GET", url, true);
+			xmlhttp.send();
+		}
+	</script>
+</head>
+<body>
+	<div class="container" style="width: 640px">
+		<div class="page-header">
+			<h1>
+				<b>SimpleVar <small>Song List</small></b>
+			</h1>
+		</div>
+		<div style="position: relative">
+			<nav>
+				<ul id="pages" class="pagination">
+					<li class="active"><a href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+				</ul>
+			</nav>
+			<button type="button" onclick="updateList(this)" class="btn btn-default btn-refresh" autocomplete="off">
+				<i class="fa fa-refresh"></i>
+			</button>
+		</div>
+		<table class="table table-striped table-curved">
+			<thead>
+				<tr>
+					<th style="width: 36px"><i class="fa fa-angle-down"></i></th>
+					<th style="width: 30px"></th>
+					<th><i class="fa fa-music"></i></th>
+					<th style="width: 60px"><i class="fa fa-clock-o"></i></th>
+					<th style="width: 164px"><i class="fa fa-user"></i></th>
+				</tr>
+			</thead>
+			<tbody id="songlist">
+				<!-- This is where songs end up :O -->
+				<!-- This is a comment. LOL -->
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
