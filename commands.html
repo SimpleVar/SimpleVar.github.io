@@ -1,0 +1,82 @@
+<html>
+<head>
+  <title>SimpleBot Commands</title>
+  <link rel="stylesheet" href="./css/simple.css">
+</head>
+<body>
+  <div class="col gap-section" style="margin: 0 4vw">
+    <div style="text-align: center">
+      <h1 style="margin-bottom: 0">SimpleBot Commands</h1>
+    </div>
+    <div>
+      <h3>Notes</h3>
+      <ul>
+        <li>Any command that accepts a username - also accepts @username</li>
+        <li>Specifying a custom command name with or without '!' prefix has the same effect</li>
+      </ul>
+      <table id="cmds" style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+            <th>Aliases</th>
+            <th>Req. Level</th>
+            <!--<th>User Cooldown</th>
+          <th>Global Cooldown</th>-->
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="custom-commands-syntax">
+      <h2>Custom Commands Syntax</h2>
+      TODO
+    </div>
+  </div>
+  <div class="row" style="background-color: var(--dark); margin-top: 3em; padding: 1em 1.5em; justify-content: space-between">
+    <span>© your face</span>
+    <a href="#">Top</a>
+  </div>
+
+  <script>
+    const COMMANDS = [
+      { usage: ['!commands'], desc: 'Links to this documentation page' },
+      { usage: ['!ignore nightbot streamlabs'], desc: 'Add names to known bots', aliases: 'addignore', req: 'Moderator' },
+      { usage: ['!unignore nightbot streamlabs'], desc: 'Remove names from known bots', aliases: 'unignore', req: 'Moderator' },
+      { usage: ['!slowmode', '!slowmode off'], desc: '', aliases: 'slowmodeoff', req: 'Moderator' },
+      { usage: ['!title'], desc: 'Display current stream title' },
+      { usage: ['!game'], desc: 'Display current stream category', },
+      { usage: ['!title We Chillin\''], desc: 'Set stream title', req: 'Moderator' },
+      { usage: ['!game Chess'], desc: 'Set stream category', req: 'Moderator' },
+      { usage: ['!poll'], desc: 'Display current poll info' },
+      { usage: ['!poll <code data-tip="Duration">--2m</code> Gonna win? | yes | no'], desc: 'Start a twitch poll with up to 5 poll options separated by pipeline character (|).<br><span class=arg-text>--Duration</span> is optional: integer followed by <code>s</code> (seconds) or <code>m</code> (minutes). Default is 2m, valid values: 15s to 30m', aliases: 'startpoll pollstart', req: 'Moderator' },
+      { usage: ['!endpoll'], desc: 'Ends the current poll immediately', aliases: 'endpoll pollend', req: 'Moderator' },
+      { usage: ['!delpoll'], desc: 'Abort the current poll without displaying results', aliases: 'delpoll deletepoll polldel polldelete', req: 'Moderator' },
+      { usage: ['!addcmd <code data-tip="User Level">-ul=vip</code> <code data-tip="Cooldown">-cd=3s</code> !hi Hello $(user)'], desc: 'Creates a custom command. See <a href=#custom-commands-syntax>Custom Commands Syntax</a>', aliases: 'addcommand addcom', req: 'Moderator' },
+      { usage: ['!editcmd !hi Hello there'], desc: 'Modify the response of an existing custom command.<br>Similar to <strong>addcmd</strong> but does not accept flags of cooldown or user-level', aliases: 'editcommand editcom', req: 'Moderator' },
+      { usage: ['!delcmd !hi'], desc: 'Deletes a custom command', aliases: 'delcommand deletecommand delcom deletecom', req: 'Moderator' },
+      { usage: ['!showcmd !hi'], desc: 'Display the response of a custom command (useful before <strong>editcmd</strong>)', aliases: 'showcommand showcom', req: 'Moderator' },
+      { usage: ['!count !hi', '!count !hi SimpleVar'], desc: 'Shows how many times a command has been used by you, or by the user specified after the command name' },
+      { usage: ['!brb'], desc: 'Mutes my microphone and display a BRB message on stream.<br>Please use this ONLY when I go and forget to do it myself :)', req: 'VIP' },
+      { usage: ['!searchgame'], desc: 'Search a twitch category by name, getting the ID or a list of disambiguations' },
+      { usage: ['!followage', '!followage @SimpleVar'], desc: 'Shows how long you have been following, or how long the specified user has been following' },
+      { usage: ['!sr'], desc: 'throw new NotImplementedException()', req: 'Keepo' },
+    ];
+
+    const rgxUsage = /^!(\w+)/i;
+    document.querySelector('#cmds > tbody').innerHTML = COMMANDS.map(c => `
+<tr>
+  <td><div class="col gap-small"><div>${c.usage.map(x => x.replace(rgxUsage, (m, g0) => `<span style='color: var(--dim-text)'>!</span><strong>${g0}</strong>`)).join('</div><div>')}</div></div></td>
+  <td>${(c.desc ?? '')}</td>
+  <td>${(c.aliases ?? '').replaceAll(' ', '<br/>')}</td>
+  <td>${(c.req ?? '')}</td>
+  <!--<td>${(c.cdUser ?? '<span style="color: var(--dim-text)">no cooldown</span>')}</td>
+  <td>${(c.cdGlobal ?? '<span style="color: var(--dim-text)">no cooldown</span>')}</td>-->
+</tr>
+`).join('')
+
+    //setTimeout(() => window.location.reload(), 100);
+  </script>
+
+</body>
+</html>
