@@ -48,7 +48,7 @@
 
 		async function refreshView() {
 			const headers = new Headers();
-			headers.append('no-cache', 'no-cache')
+			headers.append('cache-control', 'no-cache')
       const data = await (await fetch('https://simplevar.github.io/songlist.json?r=' + Date.now(), { method: 'GET', headers })).json()
 			if (lastStamp == data.stamp)
 				return
