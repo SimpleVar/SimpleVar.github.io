@@ -47,7 +47,7 @@
 		setInterval(refreshView, 3000)
 
 		async function refreshView() {
-			const data = await (await fetch('https://simplevar.github.io/songlist.json?r=' + Date.now())).json()
+			const data = await (await fetch('https://simplevar.github.io/songlist.json?r=' + Date.now(),  {cache: 'no-cache'})).json()
 			if (lastStamp == data.stamp)
 				return
 			lastStamp = data.stamp
