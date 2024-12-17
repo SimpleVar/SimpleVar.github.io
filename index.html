@@ -52,10 +52,6 @@
 				return
 			lastStamp = data.stamp
 
-			// [ytVideoId, title, author, duration, ogRequesterDisplayName]
-			//data.queue.push(['123', 'tit', 'auth', '33:33', 's']); data.queue.push(['bpxo0l_aaGM', 'tit2', 'auth2', '3:33:36', 'shang_yang_gang'])
-			//data.queue.push(['123', 'ti"t tit tit tit t1212124it tit tit tit tit tit tit 555555555555555555tit tit tit444444444 tit tit tit tit tit tit tit tit tit ', 'auth authautha14541 21 24 12 12 412 4uthauth', '33333333', 's']); data.queue.push(['bpxo0l_aaGM', 'tit2', 'auth2', '6', 'x'])
-
       curr_title.innerHTML = data.curr[0] ? `<a href="https://youtu.be/${data.curr[0]}">${data.curr[1] || '-'}</a>` : '-'
 			curr_artist.innerText = data.curr[2] || '-'
 			curr_duration.innerText = data.curr[3] || '-'
@@ -67,9 +63,10 @@
 		}
 
 		function makeRow(songData, i) {
+      // ytVideoId, title, author, duration, ogRequesterDisplayName
 			const id = songData[0]
 			songData[0] = '<span class="dim-text">' + (i + 1) + '</span>'
-			songData[1] = `<div class="row" style="align-items: center"><div class="yt-thumbnail" style="background-image: url(https://img.youtube.com/vi/${id}/mqdefault.jpg)"></div>&nbsp;<div class="single-line-text" style="min-width: 20ch; max-width: 50ch;" title="${songData[1].replaceAll('\"', '&quot;')}">${songData[1]}</div></div>`
+			songData[1] = `<div class="row" style="align-items: center"><a href="https://youtu.be/${id}"><div class="yt-thumbnail" style="background-image: url(https://img.youtube.com/vi/${id}/mqdefault.jpg)"></div></a>&nbsp;<div class="single-line-text" style="min-width: 20ch; max-width: 50ch;" title="${songData[1].replaceAll('\"', '&quot;')}">${songData[1]}</div></div>`
 			songData[2] ||= '-'
 			songData[2] = `<div class="single-line-text" style="min-width: 10ch; max-width: 30ch;" title="${songData[2].replaceAll('\"', '&quot;')}">${songData[2]}</div>`
 			songData[3] ||= '-'
