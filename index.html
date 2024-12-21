@@ -14,7 +14,7 @@
 				<div><div class="curr-field">Requested By:</div><span id="curr_requestedBy">-</span></div>
 				<div><div class="curr-field">Duration:</div><span id="curr_duration">04:20</span></div>
 			</div>
-			<img id="curr_thumbnail" src="https://img.youtube.com/vi/vid_id/mqdefault.jpg" style="height: calc(4em * var(--line-height));" />
+			<img id="curr_thumbnail" src="https://img.youtube.com/vi/vid_id/hqdefault.jpg" style="height: calc(4em * var(--line-height));" />
 		</div>
 		<div class="songlist-tbl-empty">
 			The song list is empty D:
@@ -52,11 +52,11 @@
 				return
 			lastStamp = data.stamp
 
-      curr_title.innerHTML = data.curr[0] ? `<a href="https://youtu.be/${data.curr[0]}">${data.curr[1] || '-'}</a>` : '-'
+      curr_title.innerHTML = data.curr[0] ? `<a href="https://youtu.be/${data.curr[0]}" about="_blank">${data.curr[1] || '-'}</a>` : '-'
 			curr_artist.innerText = data.curr[2] || '-'
 			curr_duration.innerText = data.curr[3] || '-'
 			curr_requestedBy.innerText = data.curr[4] || '-'
-      curr_thumbnail.setAttribute('src', `https://img.youtube.com/vi/${data.curr[0] || '-'}/mqdefault.jpg`)
+      curr_thumbnail.setAttribute('src', `https://img.youtube.com/vi/${data.curr[0] || '-'}/hqdefault.jpg`)
 
 			tbody.innerHTML = data.queue.map(makeRow).join('')
 			document.body.setAttribute('songcount', data.queue.length)
