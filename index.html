@@ -6,6 +6,7 @@
 <body>
 	<div class="col" style="align-items: center;">
 		<h1 style="margin: 0; text-shadow: 2px 2px 2px rgb(0 0 0 / 35%);">SimpleVar<span class="dim-text"> :: <span style="font-size: .75em; font-weight: normal">Song List</span></span></h1>
+		<a target="_blank" href="https://docs.google.com/spreadsheets/d/1XLZGNW9p1Xy_vPt_wDjNOKBk1zi4Qp5-gCW4OjdQDw4/view">Show full playlist</a>
 		<div class="row gap-big" style="background-color: rgb(255 255 255 / 10%); align-items: end; border-radius: 8px; padding: .75em 1em; margin: 1em 0 1.5em">
 			<div class="col">
 				<h3 style="margin: 0; color: var(--dim-text);">Currently playing</h3>
@@ -38,8 +39,6 @@
 			<br />
 			<label for="syncTolerance">Sync tolerance (milliseconds): </label>
 			<input id="syncTolerance" name="syncTolerance" type="number" min="10" max="10000" step="10" value="100" style="width: 8ch" />
-			<br />
-			<a href="https://docs.google.com/spreadsheets/d/1XLZGNW9p1Xy_vPt_wDjNOKBk1zi4Qp5-gCW4OjdQDw4/view">Entire Playlist</a>
 		</div>
 	</div>
 
@@ -98,8 +97,8 @@
     let syncData = {}
     function onYouTubeIframeAPIReady() {
 			new YT.Player('player', {
-				height: '180',
-				width: '320',
+				height: '260',
+				width: '460',
         videoId: 'dQw4w9WgXcQ',
 				playerVars: { playsinline: 1 },
         events: {
