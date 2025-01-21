@@ -1,142 +1,140 @@
 <html>
 <head>
-	<script src="https://kit.fontawesome.com/bb734a4bd1.js" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="css/simple.css">
+  <script src="https://kit.fontawesome.com/bb734a4bd1.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="css/simple.css">
 </head>
 <body>
-	<div class="col" style="align-items: center;">
-		<h1 style="margin: 0; text-shadow: 2px 2px 2px rgb(0 0 0 / 35%);">SimpleVar<span class="dim-text"> :: <span style="font-size: .75em; font-weight: normal">Song List</span></span></h1>
-		<a target="_blank" href="https://docs.google.com/spreadsheets/d/1XLZGNW9p1Xy_vPt_wDjNOKBk1zi4Qp5-gCW4OjdQDw4/view">Show full playlist</a>
-		<div class="row gap-big" style="background-color: rgb(255 255 255 / 10%); align-items: end; border-radius: 8px; padding: .75em 1em; margin: 1em 0 1.5em">
-			<div class="col">
-				<h3 style="margin: 0; color: var(--dim-text);">Currently playing</h3>
-				<div><div class="curr-field" style="min-width: 5ch">Title:</div><span id="curr_title">-</span></div>
-				<div><div class="curr-field" style="min-width: 5ch">Artist:</div><span id="curr_artist">-</span></div>
-				<div><div class="curr-field">Requested By:</div><span id="curr_requestedBy">-</span></div>
-				<div><div class="curr-field">Duration:</div><span id="curr_duration">04:20</span></div>
-			</div>
-			<img id="curr_thumbnail" src="https://img.youtube.com/vi/vid_id/hqdefault.jpg" style="height: calc(4em * var(--line-height)); user-select: none" />
-		</div>
-		<div class="songlist-tbl-empty">
-			The song list is empty D:
-		</div>
-		<table class="songlist-tbl">
-			<thead>
-				<tr>
-					<th></th>
-					<th><i class="fa fa-music"></i></th>
-					<th><i class="fa fa-radio"></i></th>
-					<th><i class="fa fa-clock-o"></i></th>
-					<th><i class="fa fa-user"></i></th>
-				</tr>
-			</thead>
-			<tbody id="tbody">
-			</tbody>
-		</table>
-		<div style="margin-top: 2em">
-			<h3 style="margin: 0; text-decoration: underline">Synced Player</h3>
-			<div id="player"></div>
-			<br />
-			<label for="syncTolerance">Sync tolerance (milliseconds): </label>
-			<input id="syncTolerance" name="syncTolerance" type="number" min="10" max="10000" step="10" value="100" style="width: 8ch" />
-		</div>
-	</div>
+  <div class="col" style="align-items: center;">
+    <h1 style="margin: 0; text-shadow: 2px 2px 2px rgb(0 0 0 / 35%);">SimpleVar<span class="dim-text"> :: <span style="font-size: .75em; font-weight: normal">Song List</span></span></h1>
+    <a target="_blank" href="https://docs.google.com/spreadsheets/d/1XLZGNW9p1Xy_vPt_wDjNOKBk1zi4Qp5-gCW4OjdQDw4/view">Show full playlist</a>
+    <div class="row gap-big" style="background-color: rgb(255 255 255 / 10%); align-items: end; border-radius: 8px; padding: .75em 1em; margin: 1em 0 1.5em">
+      <div class="col">
+        <h3 style="margin: 0; color: var(--dim-text);">Currently playing</h3>
+        <div><div class="curr-field" style="min-width: 5ch">Title:</div><span id="curr_title">-</span></div>
+        <div><div class="curr-field" style="min-width: 5ch">Artist:</div><span id="curr_artist">-</span></div>
+        <div><div class="curr-field">Requested By:</div><span id="curr_requestedBy">-</span></div>
+        <div><div class="curr-field">Duration:</div><span id="curr_duration">04:20</span></div>
+      </div>
+      <img id="curr_thumbnail" src="https://img.youtube.com/vi/vid_id/hqdefault.jpg" style="height: calc(4em * var(--line-height)); user-select: none" />
+    </div>
+    <div class="songlist-tbl-empty">
+      The song list is empty D:
+    </div>
+    <table class="songlist-tbl">
+      <thead>
+        <tr>
+          <th></th>
+          <th><i class="fa fa-music"></i></th>
+          <th><i class="fa fa-radio"></i></th>
+          <th><i class="fa fa-clock-o"></i></th>
+          <th><i class="fa fa-user"></i></th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
+    <div style="margin-top: 2em">
+      <h3 style="margin: 0; text-decoration: underline">Synced Player</h3>
+      <div id="player"></div>
+      <br />
+      <label for="syncTolerance">Sync tolerance (milliseconds): </label>
+      <input id="syncTolerance" name="syncTolerance" type="number" min="10" max="10000" step="10" value="100" style="width: 8ch" />
+    </div>
+  </div>
 
-	<script>
-		const tbody = document.getElementById('tbody')
-		const curr_title = document.getElementById('curr_title')
-		const curr_artist = document.getElementById('curr_artist')
-		const curr_duration = document.getElementById('curr_duration')
+  <script>
+    const tbody = document.getElementById('tbody')
+    const curr_title = document.getElementById('curr_title')
+    const curr_artist = document.getElementById('curr_artist')
+    const curr_duration = document.getElementById('curr_duration')
     const curr_requestedBy = document.getElementById('curr_requestedBy')
     const curr_thumbnail = document.getElementById('curr_thumbnail')
-		const syncTolerance = document.getElementById('syncTolerance')
-		syncTolerance.addEventListener('change', e => localStorage.setItem('syncTolerance', e.target.value))
+    const syncTolerance = document.getElementById('syncTolerance')
+    syncTolerance.addEventListener('change', e => localStorage.setItem('syncTolerance', e.target.value))
     syncTolerance.value = localStorage.getItem('syncTolerance') ?? syncTolerance.value
     
-		let lastStamp = -1
-		refreshView()
-		setInterval(refreshView, 1000)
+    let lastStamp = -1
+    refreshView()
+    setInterval(refreshView, 1000)
 
-		async function refreshView() {
+    async function refreshView() {
       const data = await ((await fetch('https://docs.google.com/spreadsheets/d/1XLZGNW9p1Xy_vPt_wDjNOKBk1zi4Qp5-gCW4OjdQDw4/export?range=B1&format=tsv&r=' + Date.now())).json())
-			if (lastStamp == data.stamp)
-				return
-			lastStamp = data.stamp
+      if (lastStamp == data.stamp)
+        return
+      lastStamp = data.stamp
 
       curr_title.innerHTML = data.curr[0] ? `<a href="https://youtu.be/${data.curr[0]}" target="_blank">${data.curr[1] || '-'}</a>` : '-'
-			curr_artist.innerText = data.curr[2] || '-'
-			curr_duration.innerText = data.curr[3] || '-'
-			curr_requestedBy.innerText = data.curr[4] || '-'
+      curr_artist.innerText = data.curr[2] || '-'
+      curr_duration.innerText = data.curr[3] || '-'
+      curr_requestedBy.innerText = data.curr[4] || '-'
       curr_thumbnail.setAttribute('src', `https://img.youtube.com/vi/${data.curr[0] || '-'}/hqdefault.jpg`)
 
-			tbody.innerHTML = data.queue.map(makeRow).join('')
-			document.body.setAttribute('songcount', data.queue.length)
+      tbody.innerHTML = data.queue.map(makeRow).join('')
+      document.body.setAttribute('songcount', data.queue.length)
 
-			syncPlayer(data.sync, data.curr[0])
-		}
+      syncPlayer(+data.sync, data.curr[0])
+    }
 
-		function makeRow(songData, i) {
+    function makeRow(songData, i) {
       // ytVideoId, title, author, duration, ogRequesterDisplayName
-			const id = songData[0]
-			songData[0] = '<span class="dim-text">' + (i + 1) + '</span>'
-			songData[1] = `<div class="row" style="align-items: center"><a href="https://youtu.be/${id}" target="_blank"><div class="yt-thumbnail" style="background-image: url(https://img.youtube.com/vi/${id}/mqdefault.jpg)"></div></a>&nbsp;<div class="single-line-text" style="min-width: 20ch; max-width: 50ch;" title="${songData[1].replaceAll('\"', '&quot;')}">${songData[1]}</div></div>`
-			songData[2] ||= '-'
-			songData[2] = `<div class="single-line-text" style="min-width: 10ch; max-width: 30ch;" title="${songData[2].replaceAll('\"', '&quot;')}">${songData[2]}</div>`
-			songData[3] ||= '-'
-			songData[3] = `<div class="single-line-text" style="max-width: 7ch;" title="${songData[3].replaceAll('\"', '&quot;')}">${songData[3]}</div>`
-			songData[4] ||= '-'
-			songData[4] = `<div class="single-line-text dim-text" style="max-width: 16ch;" title="${songData[4]}">${songData[4]}</div>`
-			return `<tr><td >${songData.join('</td><td>')}</td></tr>`
-		}
-
+      const id = songData[0]
+      songData[0] = '<span class="dim-text">' + (i + 1) + '</span>'
+      songData[1] = `<div class="row" style="align-items: center"><a href="https://youtu.be/${id}" target="_blank"><div class="yt-thumbnail" style="background-image: url(https://img.youtube.com/vi/${id}/mqdefault.jpg)"></div></a>&nbsp;<div class="single-line-text" style="min-width: 20ch; max-width: 50ch;" title="${songData[1].replaceAll('\"', '&quot;')}">${songData[1]}</div></div>`
+      songData[2] ||= '-'
+      songData[2] = `<div class="single-line-text" style="min-width: 10ch; max-width: 30ch;" title="${songData[2].replaceAll('\"', '&quot;')}">${songData[2]}</div>`
+      songData[3] ||= '-'
+      songData[3] = `<div class="single-line-text" style="max-width: 7ch;" title="${songData[3].replaceAll('\"', '&quot;')}">${songData[3]}</div>`
+      songData[4] ||= '-'
+      songData[4] = `<div class="single-line-text dim-text" style="max-width: 16ch;" title="${songData[4]}">${songData[4]}</div>`
+      return `<tr><td >${songData.join('</td><td>')}</td></tr>`
+    }
 
     const ytxxx = document.createElement('script');
-		ytxxx.src = "https://www.youtube.com/iframe_api"
-		document.head.append(ytxxx)
-		let player = undefined
+    ytxxx.src = "https://www.youtube.com/iframe_api"
+    document.head.append(ytxxx)
+    let player = undefined
     let syncData = {}
     function onYouTubeIframeAPIReady() {
-			new YT.Player('player', {
-				height: '260',
-				width: '460',
+      new YT.Player('player', {
+        height: '260',
+        width: '460',
         videoId: 'dQw4w9WgXcQ',
-				playerVars: { playsinline: 1 },
+        playerVars: { playsinline: 1 },
         events: {
-					onStateChange: onPlayerStateChange,
-					onReady: e => {
-						player = e.target
-						onPlayerStateChange({})
-					}
+          onStateChange: onPlayerStateChange,
+          onReady: e => {
+            player = e.target
+            onPlayerStateChange({})
+          }
         }
-			});
-		}
-		function syncPlayer(syncUTC, vidId) {
-			syncData.syncUTC = syncUTC
-			syncData.syncVidId = vidId
-			onPlayerStateChange({})
-		}
-		function onPlayerStateChange(e) {
-			if (!player || !syncData.syncVidId)
-				return
-			const state = player.getPlayerState()
+      });
+    }
+    function syncPlayer(syncUTC, vidId) {
+      syncData.syncUTC = syncUTC
+      syncData.syncVidId = vidId
+      onPlayerStateChange({})
+    }
+    function onPlayerStateChange(e) {
+      if (!player || !syncData.syncVidId)
+        return
+      const state = player.getPlayerState()
       if (state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.ENDED)
-				return
-			if (syncData.syncVidId !== syncData.playingVidId) {
+        return
+      if (syncData.syncVidId !== syncData.playingVidId) {
         console.log('loading vid ', syncData.syncVidId)
         player.loadVideoById({ videoId: syncData.syncVidId })
         syncData.playingVidId = syncData.syncVidId
-			}
-			let pos = (Date.now() - syncData.syncUTC) * .001
-			const diff = Math.abs(pos - (player.getCurrentTime() ?? 0))
-			const tolerance = Math.max(10, Math.min(10000, syncTolerance.value ?? 0)) * .001
-			if (diff > tolerance) {
-				pos += tolerance * .75
-				console.log('seeking ', pos)
-				console.log('tolerance: ' + tolerance.toFixed(2) + ' seconds')
-				player.seekTo(pos, true)
-			}
+      }
+      let pos = (Date.now() - syncData.syncUTC) * .001
+      const diff = Math.abs(pos - (player.getCurrentTime() ?? 0))
+      const tolerance = Math.max(10, Math.min(10000, syncTolerance.value ?? 0)) * .001
+      if (diff > tolerance) {
+        pos += tolerance * .75
+        console.log('seeking ', pos)
+        console.log('tolerance: ' + tolerance.toFixed(2) + ' seconds')
+        player.seekTo(pos, true)
+      }
     }
-
-	</script>
+  </script>
 </body>
 </html>
