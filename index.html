@@ -47,7 +47,7 @@
 		setInterval(refreshView, 3000)
 
 		async function refreshView() {
-      const data = await ((await fetch('https://docs.google.com/spreadsheets/d/1XLZGNW9p1Xy_vPt_wDjNOKBk1zi4Qp5-gCW4OjdQDw4/export?range=A1&format=tsv&r=' + Date.now())).json())
+      const data = await ((await fetch('https://docs.google.com/spreadsheets/d/1XLZGNW9p1Xy_vPt_wDjNOKBk1zi4Qp5-gCW4OjdQDw4/export?range=B1&format=tsv&r=' + Date.now())).json())
 			if (lastStamp == data.stamp)
 				return
 			lastStamp = data.stamp
