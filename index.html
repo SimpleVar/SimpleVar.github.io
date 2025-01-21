@@ -32,6 +32,13 @@
 			<tbody id="tbody">
 			</tbody>
 		</table>
+		<div style="margin-top: 2em">
+			<h3 style="margin: 0; text-decoration: underline">Synced Player</h3>
+			<div id="player"></div>
+			<br/>
+			<label for="syncTolerance">Sync tolerance (milliseconds): </label>
+			<input id="syncTolerance" name="syncTolerance" type="number" min="10" max="10000" step="10" value="100" style="width: 8ch" />
+		</div>
 	</div>
 
 	<script>
@@ -41,13 +48,16 @@
 		const curr_duration = document.getElementById('curr_duration')
     const curr_requestedBy = document.getElementById('curr_requestedBy')
     const curr_thumbnail = document.getElementById('curr_thumbnail')
+		const syncTolerance = document.getElementById('syncTolerance')
+		syncTolerance.addEventListener('change', e => localStorage.setItem('syncTolerance', e.target.value))
+    syncTolerance.value = localStorage.getItem('syncTolerance') ?? syncTolerance.value
     
 		let lastStamp = -1
 		refreshView()
-		setInterval(refreshView, 3000)
+		setInterval(refreshView, 1000)
 
 		async function refreshView() {
-      const data = await ((await fetch('https://docs.google.com/spreadsheets/d/1XLZGNW9p1Xy_vPt_wDjNOKBk1zi4Qp5-gCW4OjdQDw4/export?range=A1&format=tsv&r=' + Date.now())).json())
+      const data = await ((await fetch('https://docs.google.com/spreadsheets/d/1XLZGNW9p1Xy_vPt_wDjNOKBk1zi4Qp5-gCW4OjdQDw4/export?range=B1&format=tsv&r=' + Date.now())).json())
 			if (lastStamp == data.stamp)
 				return
 			lastStamp = data.stamp
@@ -60,6 +70,8 @@
 
 			tbody.innerHTML = data.queue.map(makeRow).join('')
 			document.body.setAttribute('songcount', data.queue.length)
+
+			syncPlayer(data.sync, data.curr[0])
 		}
 
 		function makeRow(songData, i) {
@@ -75,6 +87,55 @@
 			songData[4] = `<div class="single-line-text dim-text" style="max-width: 16ch;" title="${songData[4]}">${songData[4]}</div>`
 			return `<tr><td >${songData.join('</td><td>')}</td></tr>`
 		}
+
+
+    const ytxxx = document.createElement('script');
+		ytxxx.src = "https://www.youtube.com/iframe_api"
+		document.head.append(ytxxx)
+		let player = undefined
+    let syncData = {}
+    function onYouTubeIframeAPIReady() {
+			new YT.Player('player', {
+				height: '180',
+				width: '320',
+        videoId: 'dQw4w9WgXcQ',
+				playerVars: { playsinline: 1 },
+        events: {
+					onStateChange: onPlayerStateChange,
+					onReady: e => {
+						player = e.target
+						onPlayerStateChange({})
+					}
+        }
+			});
+		}
+		function syncPlayer(syncUTC, vidId) {
+			syncData.syncUTC = syncUTC
+			syncData.syncVidId = vidId
+			onPlayerStateChange({})
+		}
+		function onPlayerStateChange(e) {
+			if (!player || !syncData.syncVidId)
+				return
+			const state = player.getPlayerState()
+      if (state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.ENDED)
+				return
+			if (syncData.syncVidId !== syncData.playingVidId) {
+        console.log('loading vid ', syncData.syncVidId)
+        player.loadVideoById({ videoId: syncData.syncVidId })
+        syncData.playingVidId = syncData.syncVidId
+			}
+			let pos = (Date.now() - syncData.syncUTC) * .001
+			const diff = Math.abs(pos - (player.getCurrentTime() ?? 0))
+			const tolerance = Math.max(10, Math.min(10000, syncTolerance.value ?? 0)) * .001
+			if (diff > tolerance) {
+				pos += tolerance * .75
+				console.log('seeking ', pos)
+				console.log('tolerance: ' + tolerance.toFixed(2) + ' seconds')
+				player.seekTo(pos, true)
+			}
+    }
+
 	</script>
 </body>
 </html>
