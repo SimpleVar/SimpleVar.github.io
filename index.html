@@ -39,6 +39,9 @@
       <br />
       <label for="syncTolerance">Sync tolerance (milliseconds): </label>
       <input id="syncTolerance" name="syncTolerance" type="number" min="10" max="10000" step="10" value="100" style="width: 8ch" />
+      <br />
+      <label for="syncOffset">Sync offset (milliseconds): </label>
+      <input id="syncOffset" name="syncOffset" type="number" min="-90000" max="90000" step="50" value="0" style="width: 9ch" />
     </div>
   </div>
 
@@ -50,9 +53,12 @@
     const curr_requestedBy = document.getElementById('curr_requestedBy')
     const curr_thumbnail = document.getElementById('curr_thumbnail')
     const syncTolerance = document.getElementById('syncTolerance')
+    const syncOffset = document.getElementById('syncOffset')
     syncTolerance.addEventListener('change', e => localStorage.setItem('syncTolerance', e.target.value))
     syncTolerance.value = localStorage.getItem('syncTolerance') ?? syncTolerance.value
-    
+    syncOffset.addEventListener('change', e => localStorage.setItem('syncOffset', e.target.value))
+    syncOffset.value = localStorage.getItem('syncOffset') ?? syncOffset.value
+
     let lastStamp = -1
     refreshView()
     setInterval(refreshView, 1000)
@@ -125,11 +131,16 @@
         player.loadVideoById({ videoId: syncData.syncVidId })
         syncData.playingVidId = syncData.syncVidId
       }
-      let pos = (Date.now() - syncData.syncUTC) * .001
+      const offsetMs = Math.max(-90000, Math.min(90000, syncOffset.value ?? 0))
+      let pos = (Date.now() - syncData.syncUTC + offsetMs) * .001
+      if (pos < 0) {
+        setTimeout(onPlayerStateChange, -pos, {})
+        return
+      }
       const diff = Math.abs(pos - (player.getCurrentTime() ?? 0))
       const tolerance = Math.max(10, Math.min(10000, syncTolerance.value ?? 0)) * .001
       if (diff > tolerance) {
-        pos += tolerance * .75
+        pos += tolerance * .5
         console.log('seeking ', pos)
         console.log('tolerance: ' + tolerance.toFixed(2) + ' seconds')
         player.seekTo(pos, true)
