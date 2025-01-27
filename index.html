@@ -56,7 +56,7 @@
     const syncOffset = document.getElementById('syncOffset')
     syncTolerance.addEventListener('change', e => localStorage.setItem('syncTolerance', e.target.value))
     syncTolerance.value = localStorage.getItem('syncTolerance') ?? syncTolerance.value
-    syncOffset.addEventListener('change', e => localStorage.setItem('syncOffset', e.target.value))
+    syncOffset.addEventListener('change', e => { localStorage.setItem('syncOffset', e.target.value); onPlayerStateChange({}); })
     syncOffset.value = localStorage.getItem('syncOffset') ?? syncOffset.value
 
     let lastStamp = -1
