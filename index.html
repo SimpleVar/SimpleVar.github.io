@@ -110,6 +110,7 @@
           onStateChange: onPlayerStateChange,
           onReady: e => {
             player = e.target
+            player.setVolume(20)
             onPlayerStateChange({})
           }
         }
@@ -124,7 +125,7 @@
       if (!player || !syncData.syncVidId)
         return
       const state = player.getPlayerState()
-      if (state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.ENDED)
+      if (state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.ENDED && state !== YT.PlayerState.UNSTARTED)
         return
       if (syncData.syncVidId !== syncData.playingVidId) {
         console.log('loading vid ', syncData.syncVidId)
