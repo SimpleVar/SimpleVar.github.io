@@ -35,13 +35,16 @@
     </table>
     <div style="margin-top: 2em">
       <h3 style="margin: 0; text-decoration: underline">Synced Player</h3>
-      <div id="player"></div>
       <br />
       <label for="syncTolerance">Sync tolerance (milliseconds): </label>
       <input id="syncTolerance" name="syncTolerance" type="number" min="10" max="10000" step="10" value="100" style="width: 8ch" />
       <br />
       <label for="syncOffset">Sync offset (milliseconds): </label>
       <input id="syncOffset" name="syncOffset" type="number" min="-90000" max="90000" step="50" value="0" style="width: 9ch" />
+      <br />
+      <br />
+      <br />
+      <div id="player"></div>
     </div>
   </div>
 
@@ -102,8 +105,8 @@
     let syncData = {}
     function onYouTubeIframeAPIReady() {
       new YT.Player('player', {
-        height: '260',
-        width: '460',
+        height: '520',
+        width: '920',
         videoId: 'dQw4w9WgXcQ',
         playerVars: { playsinline: 1 },
         events: {
