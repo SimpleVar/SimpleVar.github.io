@@ -124,7 +124,7 @@
     function onPlayerStateChange(e) {
       if (!player || !syncData.syncVidId)
         return
-      if (syncTolerance.value === 10000)
+      if (syncTolerance.value == 10000)
         return
       const state = player.getPlayerState()
       if (state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.ENDED && state !== YT.PlayerState.UNSTARTED)
