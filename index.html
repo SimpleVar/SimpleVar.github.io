@@ -124,8 +124,6 @@
     function onPlayerStateChange(e) {
       if (!player || !syncData.syncVidId)
         return
-      if (syncTolerance.value == 10000)
-        return
       const state = player.getPlayerState()
       if (state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.ENDED && state !== YT.PlayerState.UNSTARTED)
         return
@@ -134,6 +132,8 @@
         player.loadVideoById({ videoId: syncData.syncVidId })
         syncData.playingVidId = syncData.syncVidId
       }
+      if (syncTolerance.value == 10000)
+        return
       const offsetMs = Math.max(-90000, Math.min(90000, syncOffset.value ?? 0))
       let pos = (Date.now() - syncData.syncUTC + offsetMs) * .001
       if (pos < 0) {
