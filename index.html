@@ -33,7 +33,7 @@
       <tbody id="tbody">
       </tbody>
     </table>
-    <div style="margin-top: 3em">
+    <div style="margin-top: 5em">
       <h3 style="margin: 0; text-decoration: underline">Synced Player</h3>
       <label for="syncTolerance">Sync tolerance (milliseconds): </label>
       <input id="syncTolerance" name="syncTolerance" type="number" min="10" max="10000" step="10" value="100" style="width: 8ch" />
@@ -107,8 +107,8 @@
     let syncData = {}
     function onYouTubeIframeAPIReady() {
       new YT.Player('player', {
-        height: '520',
-        width: '920',
+        height: '900',
+        width: '1600',
         videoId: 'dQw4w9WgXcQ',
         playerVars: { playsinline: 1 },
         events: {
