@@ -147,7 +147,7 @@ table#cmds > tbody > tr > td:nth-child(6) {
 }
 .player-scrub-area {
     background-color: rgb(106 141 135);
-    height: 4px;
+    height: 8px;
 }
 .player-scrub {
     background-color: rgb(54, 243, 214);
