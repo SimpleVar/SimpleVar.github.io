@@ -86,6 +86,12 @@
         return
       lastStamp = data.stamp
 
+      if (window.pageYOffset + window.innerHeight >= document.documentElement.scrollHeight) {
+        setTimeout(() => {
+          window.scrollBy(0, 1000000)
+        }, 0)
+      }
+
       playerSongTitle.innerText = data.curr[1] || '-'
       curr_title.innerHTML = data.curr[0] ? `<a href="https://youtu.be/${data.curr[0]}" target="_blank">${data.curr[1] || '-'}</a>` : '-'
       curr_artist.innerText = data.curr[2] || '-'
@@ -128,7 +134,7 @@
           onStateChange: onPlayerStateChange,
           onReady: e => {
             player = e.target
-            player.setVolume(20)
+            player.setVolume(30)
             onPlayerStateChange({})
             updateScrub()
           }
