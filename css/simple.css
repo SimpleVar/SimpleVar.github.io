@@ -11,6 +11,7 @@ html {
 body {
     margin: 0;
     padding: 1em;
+    --player-scrub-progress: 0;
 }
 a {
     color: inherit;
@@ -128,4 +129,25 @@ table#cmds > tbody > tr > td:nth-child(3) {
 table#cmds > tbody > tr > td:nth-child(5),
 table#cmds > tbody > tr > td:nth-child(6) {
     text-align: center;
+}
+
+
+.yt-player iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.player-scrub {
+    height: 4px;
+    width: calc(100 * var(--player-scrub-progress) * 1%);
+    background-color: rgb(54, 243, 214);
+}
+.player-info {
+    width: 100%;
+    padding: 1ch 1.5ch;
+    background-color: rgb(38 64 54);
 }
