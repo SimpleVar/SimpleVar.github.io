@@ -2,17 +2,6 @@
 <head>
   <script src="https://kit.fontawesome.com/bb734a4bd1.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="css/simple.css">
-  <style>
-    .yt-player iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-  </style>
 </head>
 <body>
   <div class="col" style="align-items: center;">
@@ -58,8 +47,13 @@
       <br />
       <br />
       <div style="width: 100%" class="yt-player">
-        <div style="position: relative; width: 100%; overflow: hidden; padding-top: 56.25%;">
+        <div style="position: relative; width: 100%; padding-top: 56.25%;">
           <div id="player"></div>
+        </div>
+        <div class="player-scrub"></div>
+        <div class="player-info">
+          <span id="playerSongTitle">Liebeslied - Meep Mop</span><br/>
+          <span class="dim-text" style="font-size: small">Requested by&nbsp;<strong id="playerSongRequester">Yuli1000</strong></span>
         </div>
       </div>
     </div>
@@ -74,6 +68,8 @@
     const curr_thumbnail = document.getElementById('curr_thumbnail')
     const syncTolerance = document.getElementById('syncTolerance')
     const syncOffset = document.getElementById('syncOffset')
+    const playerSongTitle = document.getElementById('playerSongTitle')
+    const playerSongRequester = document.getElementById('playerSongRequester')
     syncTolerance.addEventListener('change', e => localStorage.setItem('syncTolerance', e.target.value))
     syncTolerance.value = localStorage.getItem('syncTolerance') ?? syncTolerance.value
     syncOffset.addEventListener('change', e => { localStorage.setItem('syncOffset', e.target.value); onPlayerStateChange({}); })
@@ -89,10 +85,11 @@
         return
       lastStamp = data.stamp
 
+      playerSongTitle.innerText = data.curr[1] || '-'
       curr_title.innerHTML = data.curr[0] ? `<a href="https://youtu.be/${data.curr[0]}" target="_blank">${data.curr[1] || '-'}</a>` : '-'
       curr_artist.innerText = data.curr[2] || '-'
       curr_duration.innerText = data.curr[3] || '-'
-      curr_requestedBy.innerText = data.curr[4] || '-'
+      curr_requestedBy.innerText = playerSongRequester.innerText = data.curr[4] || '-'
       curr_thumbnail.setAttribute('src', `https://img.youtube.com/vi/${data.curr[0] || '-'}/hqdefault.jpg`)
 
       tbody.innerHTML = data.queue.map(makeRow).join('')
@@ -132,9 +129,15 @@
             player = e.target
             player.setVolume(20)
             onPlayerStateChange({})
+            updateScrub()
           }
         }
       });
+    }
+    function updateScrub() {
+      const p = player?.getCurrentTime() / player?.getDuration()
+      document.body.style.setProperty('--player-scrub-progress', !isNaN(p) && isFinite(p) ? p : 0.5)
+      requestAnimationFrame(updateScrub)
     }
     function syncPlayer(syncUTC, vidId) {
       syncData.syncUTC = syncUTC
