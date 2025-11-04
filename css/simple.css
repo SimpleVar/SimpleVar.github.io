@@ -141,13 +141,16 @@ table#cmds > tbody > tr > td:nth-child(6) {
     height: 100%;
     border: none;
 }
-.player-scrub {
+.player-scrub-area {
+    background-color: rgb(106 141 135);
     height: 4px;
-    width: calc(100 * var(--player-scrub-progress) * 1%);
+}
+.player-scrub {
     background-color: rgb(54, 243, 214);
+    height: 100%;
+    width: calc(100 * var(--player-scrub-progress) * 1%);
 }
 .player-info {
-    width: 100%;
     padding: 1ch 1.5ch;
     background-color: rgb(38 64 54);
 }
