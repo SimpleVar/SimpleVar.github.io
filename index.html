@@ -54,7 +54,7 @@
         <div class="player-info">
           <span id="playerSongTitle">Video Title</span>
           <br/>
-          <span class="dim-text" style="font-size: 3rem">Requested by:&nbsp;<strong id="playerSongRequester">&mdash;</strong></span>
+          <span class="dim-text" style="font-size: 3rem">Requested by:&nbsp;<strong id="playerSongRequester">—</strong></span>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
       curr_title.innerHTML = data.curr[0] ? `<a href="https://youtu.be/${data.curr[0]}" target="_blank">${data.curr[1] || '-'}</a>` : '-'
       curr_artist.innerText = data.curr[2] || '-'
       curr_duration.innerText = data.curr[3] || '-'
-      curr_requestedBy.innerText = playerSongRequester.innerText = data.curr[4] || '&mdash;'
+      curr_requestedBy.innerText = playerSongRequester.innerText = data.curr[4] || '—'
       curr_thumbnail.setAttribute('src', `https://img.youtube.com/vi/${data.curr[0] || '-'}/hqdefault.jpg`)
 
       tbody.innerHTML = data.queue.map(makeRow).join('')
