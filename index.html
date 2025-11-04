@@ -34,7 +34,7 @@
       </tbody>
     </table>
     <div style="margin-top: 5em; width: 100%">
-      <h3 style="margin: 0; text-decoration: underline">Synced Player</h3>
+      <h3 style="margin: 0; text-decoration: underline; cursor: pointer" onclick="window.scrollBy(0, 1000000); debugger; window.player?.playVideo()">Synced Player</h3>
       <label for="syncTolerance">Sync tolerance (milliseconds): </label>
       <input id="syncTolerance" name="syncTolerance" type="number" min="10" max="10000" step="10" value="100" style="width: 8ch" />
       <br />
@@ -133,7 +133,7 @@
         events: {
           onStateChange: onPlayerStateChange,
           onReady: e => {
-            player = e.target
+            window.player = player = e.target
             player.setVolume(30)
             onPlayerStateChange({})
             updateScrub()
