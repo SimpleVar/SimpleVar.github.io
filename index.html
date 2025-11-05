@@ -53,8 +53,10 @@
         <div class="player-scrub-area"><div class="player-scrub"></div></div>
         <div class="player-info">
           <span id="playerSongTitle">Video Title</span>
-          <br/>
-          <span class="dim-text" style="font-size: 3rem">Requested by:&nbsp;<strong id="playerSongRequester">—</strong></span>
+          <div class="row" style="justify-content: space-between; font-size: 3rem">
+            <span class="dim-text">Requested by:&nbsp;<strong id="playerSongRequester">—</strong></span>
+            <span class="dim-text" id="playerSongDuration">00:00</span>
+          </div>
         </div>
       </div>
     </div>
@@ -71,6 +73,7 @@
     const syncOffset = document.getElementById('syncOffset')
     const playerSongTitle = document.getElementById('playerSongTitle')
     const playerSongRequester = document.getElementById('playerSongRequester')
+    const playerSongDuration = document.getElementById('playerSongDuration')
     syncTolerance.addEventListener('change', e => localStorage.setItem('syncTolerance', e.target.value))
     syncTolerance.value = localStorage.getItem('syncTolerance') ?? syncTolerance.value
     syncOffset.addEventListener('change', e => { localStorage.setItem('syncOffset', e.target.value); onPlayerStateChange({}); })
@@ -95,7 +98,7 @@
       playerSongTitle.innerText = data.curr[1] || '-'
       curr_title.innerHTML = data.curr[0] ? `<a href="https://youtu.be/${data.curr[0]}" target="_blank">${data.curr[1] || '-'}</a>` : '-'
       curr_artist.innerText = data.curr[2] || '-'
-      curr_duration.innerText = data.curr[3] || '-'
+      curr_duration.innerText = playerSongDuration.innerText = data.curr[3] || '-'
       curr_requestedBy.innerText = playerSongRequester.innerText = data.curr[4] || '—'
       curr_thumbnail.setAttribute('src', `https://img.youtube.com/vi/${data.curr[0] || '-'}/hqdefault.jpg`)
 
