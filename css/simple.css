@@ -159,7 +159,7 @@ table#cmds > tbody > tr > td:nth-child(6) {
     background-color: rgb(38 64 54);
 }
 #playerSongTitle {
-    font-size: 5rem;
+    font-size: 4rem;
     display: inline-block;
     width: 100%;
     overflow-x: hidden;
