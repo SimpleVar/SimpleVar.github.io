@@ -89,6 +89,7 @@
         return
       lastStamp = data.stamp
 
+      // check if currenty scrolled all the way down, so keep it that way
       if (window.pageYOffset + window.innerHeight >= document.documentElement.scrollHeight) {
         setTimeout(() => {
           window.scrollBy(0, 1000000)
@@ -127,6 +128,7 @@
     document.head.append(ytxxx)
     let player = undefined
     let syncData = {}
+    let autoplay = document.location.hash === '#play'
     function onYouTubeIframeAPIReady() {
       new YT.Player('player', {
         height: '900',
@@ -137,7 +139,7 @@
           onStateChange: onPlayerStateChange,
           onReady: e => {
             window.player = player = e.target
-            player.setVolume(30)
+            player.setVolume(autoplay ? 0 : 30)
             onPlayerStateChange({})
             updateScrub()
           }
@@ -154,19 +156,20 @@
       syncData.syncVidId = vidId
       onPlayerStateChange({})
     }
-    let checkAutoplay = true
+    let initVolume = true
     function onPlayerStateChange(e) {
       if (!player || !syncData.syncVidId)
         return
-      if (checkAutoplay) {
-        checkAutoplay = false
-        if (document.location.hash === '#play') {
+      const state = player.getPlayerState()
+      if (!autoplay && state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.ENDED && state !== YT.PlayerState.UNSTARTED)
+        return
+      if (initVolume && state === YT.PlayerState.PLAYING) {
+        initVolume = false
+        if (autoplay) {
+          player.setVolume(0)
           window.scrollBy(0, 1000000)
         }
       }
-      const state = player.getPlayerState()
-      if (state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.ENDED && state !== YT.PlayerState.UNSTARTED)
-        return
       if (syncData.syncVidId !== syncData.playingVidId) {
         console.log('loading vid ', syncData.syncVidId)
         player.loadVideoById({ videoId: syncData.syncVidId })
