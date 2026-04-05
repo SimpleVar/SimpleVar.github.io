@@ -154,9 +154,16 @@
       syncData.syncVidId = vidId
       onPlayerStateChange({})
     }
+    let checkAutoplay = true
     function onPlayerStateChange(e) {
       if (!player || !syncData.syncVidId)
         return
+      if (checkAutoplay) {
+        checkAutoplay = false
+        if (document.location.hash === '#play') {
+          window.scrollBy(0, 1000000)
+        }
+      }
       const state = player.getPlayerState()
       if (state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.ENDED && state !== YT.PlayerState.UNSTARTED)
         return
