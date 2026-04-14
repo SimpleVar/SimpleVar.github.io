@@ -154,7 +154,12 @@
         if (!isNaN(rem) && isFinite(rem)) {
           const date = new Date(0)
           date.setSeconds(rem)
-          playerRemainingTime.innerText = date.toISOString().substring(11, 19).trimStart('0').trimStart(':').trimStart('0')
+          let remStr = date.toISOString().substring(11, 19)
+          let i = 0
+          while (remStr[i] === '0') i++
+          if (remStr[i] === ':') i++
+          if (remStr[i] === '0') i++
+          playerRemainingTime.innerText = remStr.substring(i)
         }
         const p = t / dur
         document.body.style.setProperty('--player-scrub-progress', !isNaN(p) && isFinite(p) ? p : 0)
