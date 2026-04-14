@@ -152,9 +152,9 @@
         const dur = player.getDuration()
         const rem = dur - t;
         if (!isNaN(rem) && isFinite(rem)) {
-          const date = new Date(0);
-          date.setSeconds(rem);
-          playerRemainingTime.innerText = date.toISOString().substring(11, 19);
+          const date = new Date(0)
+          date.setSeconds(rem)
+          playerRemainingTime.innerText = date.toISOString().substring(11, 19).trimStart('0').trimStart(':').trimStart('0')
         }
         const p = t / dur
         document.body.style.setProperty('--player-scrub-progress', !isNaN(p) && isFinite(p) ? p : 0)
