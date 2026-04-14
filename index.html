@@ -55,7 +55,7 @@
           <span id="playerSongTitle">Video Title</span>
           <div class="row" style="justify-content: space-between; font-size: 3rem">
             <span class="dim-text">Requested by:&nbsp;<strong id="playerSongRequester">—</strong></span>
-            <span class="dim-text" id="playerSongDuration">00:00</span>
+            <span class="dim-text" id="playerRemainingTime">00:00</span>
           </div>
         </div>
       </div>
@@ -73,7 +73,7 @@
     const syncOffset = document.getElementById('syncOffset')
     const playerSongTitle = document.getElementById('playerSongTitle')
     const playerSongRequester = document.getElementById('playerSongRequester')
-    const playerSongDuration = document.getElementById('playerSongDuration')
+    const playerRemainingTime = document.getElementById('playerRemainingTime')
     syncTolerance.addEventListener('change', e => localStorage.setItem('syncTolerance', e.target.value))
     syncTolerance.value = localStorage.getItem('syncTolerance') ?? syncTolerance.value
     syncOffset.addEventListener('change', e => { localStorage.setItem('syncOffset', e.target.value); onPlayerStateChange({}); })
@@ -99,7 +99,7 @@
       playerSongTitle.innerText = data.curr[1] || '-'
       curr_title.innerHTML = data.curr[0] ? `<a href="https://youtu.be/${data.curr[0]}" target="_blank">${data.curr[1] || '-'}</a>` : '-'
       curr_artist.innerText = data.curr[2] || '-'
-      curr_duration.innerText = playerSongDuration.innerText = data.curr[3] || '-'
+      curr_duration.innerText = playerRemainingTime.innerText = data.curr[3] || '-'
       curr_requestedBy.innerText = playerSongRequester.innerText = data.curr[4] || '—'
       curr_thumbnail.setAttribute('src', `https://img.youtube.com/vi/${data.curr[0] || '-'}/hqdefault.jpg`)
 
@@ -147,8 +147,18 @@
       });
     }
     function updateScrub() {
-      const p = player?.getCurrentTime() / player?.getDuration()
-      document.body.style.setProperty('--player-scrub-progress', !isNaN(p) && isFinite(p) ? p : 0)
+      if (player) {
+        const t = player.getCurrentTime()
+        const dur = player.getDuration()
+        const rem = dur - t;
+        if (!isNaN(rem) && isFinite(p)) {
+          const date = new Date(0);
+          date.setSeconds(rem);
+          playerRemainingTime.innerText = date.toISOString().substring(11, 19);
+        }
+        const p = t / dur
+        document.body.style.setProperty('--player-scrub-progress', !isNaN(p) && isFinite(p) ? p : 0)
+      }
       requestAnimationFrame(updateScrub)
     }
     function syncPlayer(syncUTC, vidId) {
