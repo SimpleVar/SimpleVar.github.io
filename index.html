@@ -151,7 +151,7 @@
         const t = player.getCurrentTime()
         const dur = player.getDuration()
         const rem = dur - t;
-        if (!isNaN(rem) && isFinite(p)) {
+        if (!isNaN(rem) && isFinite(rem)) {
           const date = new Date(0);
           date.setSeconds(rem);
           playerRemainingTime.innerText = date.toISOString().substring(11, 19);
